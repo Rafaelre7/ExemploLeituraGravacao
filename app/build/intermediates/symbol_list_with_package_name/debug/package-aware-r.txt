@@ -741,9 +741,11 @@ id barrier
 id beginning
 id blocking
 id bottom
+id btnCaminhoUSB
 id btnLeitura
 id btnSalvar
 id btnSalvarCache
+id btnSalvarExterno
 id buttonPanel
 id center_vertical
 id chains
