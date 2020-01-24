@@ -1,13 +1,14 @@
 package com.solinftec.exemploleituraescrita;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.Manifest;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.media.MediaScannerConnection;
-import android.net.Uri;
+import android.hardware.usb.UsbDevice;
+import android.hardware.usb.UsbManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -16,6 +17,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.github.mjdev.libaums.UsbMassStorageDevice;
+import com.github.mjdev.libaums.fs.FileSystem;
+import com.github.mjdev.libaums.fs.UsbFile;
+import com.github.mjdev.libaums.fs.UsbFileInputStream;
+import com.github.mjdev.libaums.fs.UsbFileOutputStream;
+import com.solinftec.exemploleituraescrita.util.Helper;
+import com.solinftec.exemploleituraescrita.util.HomeCallback;
 import com.solinftec.exemploleituraescrita.util.Permissao;
 
 import java.io.BufferedReader;
@@ -23,25 +34,70 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements HomeCallback {
 
 
-    Button btnSalvar;
-    Button btnSalvarExterno;
-    Button btnSalvarCache;
-    Button btnLeitura;
-    Button btnCaminhoUSB;
-    EditText edtTxtSalvar;
-    String content;
+    private Button btnSalvar, btnSalvarPendrive;
+    private Button btnSalvarExterno;
+    private Button btnSalvarCache;
+    private Button btnLeitura;
+    private EditText edtTxtSalvar, edtCaminhoiUsb;
+    private String content;
 
+    private String TAG = "OTGViewer";
+    private static final String ACTION_USB_PERMISSION = "com.solinftec.exemploleituraescrita.USB_PERMISSION";
+    private List<UsbDevice> mDetectedDevices;
+    private UsbManager mUsbManager;
+    private UsbMassStorageDevice mUsbMSDevice;
+    private PendingIntent mPermissionIntent;
+
+    private Byte[] bytes;
+    private static int TIMEOUT = 0;
+    private boolean forceClaim = true;
+
+    FileSystem currentFs;
+
+
+    //    private UsbDevice device = getIntent().getParcelableExtra(UsbManager.EXTRA_DEVICE);
+    private final BroadcastReceiver usbReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (ACTION_USB_PERMISSION.equals(action)) {
+                synchronized (this) {
+                    UsbDevice device = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
+
+                    if (intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)) {
+                        if (device != null) {
+                            //call method to set up device communication
+//                            device.getDeviceName()
+                            connectDevice(device);
+                        }
+                    } else {
+                        Log.d(TAG, "permission denied for device " + device);
+                    }
+                }
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_USB_PERMISSION), 0);
+        mUsbManager = (UsbManager) getSystemService(Context.USB_SERVICE);
+        mDetectedDevices = new ArrayList<UsbDevice>();
+
 
         inicializarComponentes();
         enablePermissions();
@@ -116,14 +172,15 @@ public class MainActivity extends AppCompatActivity {
                 FileOutputStream outputStream;
                 if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
                     try {
-                        file = new File(Environment.getExternalStorageDirectory(), "MyCache"); //Nesta linha salva na raiz
+                        file = new File(Environment.getExternalStorageDirectory() + "/Trabalho/Solinftec/Logs", "Log" + Helper.retornarData()); //Nesta linha salva na raiz
 
 //                        file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "MyCache"); //Nesta linha salva no diretorio especifico
 
 //                        file = new File(Environment.getExternalStoragePublicDirectory(getExternalFilesDir(Environment.MEDIA_MOUNTED)), "MyCache"); //Nesta linha salva no diretorio especifico
 
                         outputStream = new FileOutputStream(file);
-                        outputStream.write(content.getBytes());
+                        //                        outputStream.write(content.getBytes());
+                        outputStream.write(edtTxtSalvar.getText().toString().getBytes());
                         outputStream.close();
 
                         Toast.makeText(getApplicationContext(), "Salvo com sucesso !", Toast.LENGTH_LONG).show();
@@ -139,28 +196,103 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btnCaminhoUSB.setOnClickListener(new View.OnClickListener() {
+        btnSalvarPendrive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                File file;
 
-                file = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-                MediaScannerConnection.scanFile(getApplicationContext(),
-                        new String[]{file.toString()}, null,
-                        new MediaScannerConnection.MediaScannerConnectionClient() {
-                            @Override
-                            public void onMediaScannerConnected() {
+                try {
 
-                            }
 
-                            @Override
-                            public void onScanCompleted(String s, Uri uri) {
-                                Toast.makeText(getApplicationContext(), "External Storage path: "+ uri + s, Toast.LENGTH_LONG).show();
-                            }
-                        });
+//                Log.e(TAG,"TESTE: "+mUsbMSDevice.getUsbDevice().getDeviceName());
+//                Log.e(TAG,"TESTE: "+mUsbMSDevice.getMassStorageDevices(getBaseContext()));
+                    UsbFile root = currentFs.getRootDirectory();
+
+                    UsbFile[] files = root.listFiles();
+                    for (UsbFile file : files) {
+                        Log.d(TAG, file.getName());
+                        if (file.isDirectory()) {
+//                            Log.d(TAG, "Arquivo: "+file.getLength());
+
+//                            file.getLength();
+                        }
+                    }
+                    UsbFile newDir = root.createDirectory("foo");
+                    UsbFile file = newDir.createFile("bar.txt");
+
+                    //escrever no arquivo
+                    OutputStream os = new UsbFileOutputStream(file);
+
+                    os.write("hello".getBytes());
+                    os.close();
+
+                    // Lendo o arquivo
+                    InputStream is = new UsbFileInputStream(file);
+                    byte[] buffer = new byte[currentFs.getChunkSize()];
+                    is.read(buffer);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                mUsbMSDevice.close();
+
             }
         });
+
     }
+
+
+    private void connectDevice(UsbDevice device) {
+
+        if (mUsbManager.hasPermission(device))
+            Log.d(TAG, "Obteve permissão!");
+
+        UsbMassStorageDevice[] devices = UsbMassStorageDevice.getMassStorageDevices(this);
+        if (devices.length > 0) {
+            mUsbMSDevice = devices[0];
+
+        }
+        try {
+            for (UsbMassStorageDevice devic : devices) {
+                devic.init();
+                currentFs = devic.getPartitions().get(0).getFileSystem();
+                Log.d(TAG, "Capacity: " + currentFs.getCapacity());
+                Log.d(TAG, "Occupied Space: " + currentFs.getOccupiedSpace());
+                Log.d(TAG, "Free Space: " + currentFs.getFreeSpace());
+                Log.d(TAG, "Chunk size: " + currentFs.getChunkSize());
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    private void checkUsbStatus() {
+
+        mDetectedDevices.clear();
+        mUsbManager = (UsbManager) getSystemService(Context.USB_SERVICE);
+
+        if (mUsbManager != null) {
+            HashMap<String, UsbDevice> deviceList = mUsbManager.getDeviceList();
+
+            if (!deviceList.isEmpty()) {
+                Iterator<UsbDevice> deviceIterator = deviceList.values().iterator();
+                while (deviceIterator.hasNext()) {
+                    UsbDevice device = deviceIterator.next();
+                    Toast.makeText(getApplicationContext(), "Device name: " + device.getDeviceName() + ", Product name: " + device.getProductName(), Toast.LENGTH_LONG).show();
+
+                    mDetectedDevices.add(device);
+                    mUsbManager.requestPermission(device, mPermissionIntent);
+//                    edtTxtSalvar.setText(device.getProductName());
+                    edtCaminhoiUsb.setText(device.getDeviceName());
+                }
+            }
+
+        }
+
+    }
+
 
     private void enablePermissions() {
 
@@ -189,10 +321,41 @@ public class MainActivity extends AppCompatActivity {
 
     private void inicializarComponentes() {
         btnSalvar = findViewById(R.id.btnSalvar);
+        btnSalvarPendrive = findViewById(R.id.btnSalvarPenDrive);
         btnSalvarCache = findViewById(R.id.btnSalvarCache);
         btnLeitura = findViewById(R.id.btnLeitura);
         edtTxtSalvar = findViewById(R.id.edtTxtSalvar);
+        edtCaminhoiUsb = findViewById(R.id.edtCaminhoUsb);
         btnSalvarExterno = findViewById(R.id.btnSalvarExterno);
-        btnCaminhoUSB = findViewById(R.id.btnCaminhoUSB);
+    }
+
+    @Override
+    public List<UsbDevice> getUsbDevices() {
+        return mDetectedDevices;
+    }
+
+//    @Override
+//    public void requestPermission(int pos) {
+//        mUsbManager.requestPermission(mDetectedDevices.get(pos), mPermissionIntent);
+//    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
+        filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
+        filter.addAction(ACTION_USB_PERMISSION);
+
+        registerReceiver(usbReceiver, filter);
+        checkUsbStatus();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(usbReceiver);
+        Helper.deleteCache(getCacheDir());
     }
 }

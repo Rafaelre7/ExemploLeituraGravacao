@@ -651,6 +651,7 @@ drawable abc_textfield_search_activated_mtrl_alpha
 drawable abc_textfield_search_default_mtrl_alpha
 drawable abc_textfield_search_material
 drawable abc_vector_test
+drawable banner
 drawable btn_checkbox_checked_mtrl
 drawable btn_checkbox_checked_to_unchecked_mtrl_animation
 drawable btn_checkbox_unchecked_mtrl
@@ -741,11 +742,11 @@ id barrier
 id beginning
 id blocking
 id bottom
-id btnCaminhoUSB
 id btnLeitura
 id btnSalvar
 id btnSalvarCache
 id btnSalvarExterno
+id btnSalvarPenDrive
 id buttonPanel
 id center_vertical
 id chains
@@ -764,6 +765,7 @@ id dimensions
 id direct
 id disableHome
 id edit_query
+id edtCaminhoUsb
 id edtTxtSalvar
 id end
 id expand_activities_button
@@ -1343,3 +1345,4 @@ styleable Toolbar android_gravity android_minHeight buttonGravity collapseConten
 styleable View android_theme android_focusable paddingEnd paddingStart theme
 styleable ViewBackgroundHelper android_background backgroundTint backgroundTintMode
 styleable ViewStubCompat android_id android_layout android_inflatedId
+xml device_filter

@@ -1,4 +1,4 @@
-#Fri Jan 17 11:25:55 BRST 2020
+#Fri Jan 24 14:44:33 BRST 2020
 base.0=C\:\\Users\\Rafael Pimenta\\StudioProjects\\ExemploLeituraEscrita\\app\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\out\\classes.dex
 path.1=classes.dex
 renamed.1=classes2.dex
