@@ -743,6 +743,7 @@ id beginning
 id blocking
 id bottom
 id btnLeitura
+id btnLerUsb
 id btnSalvar
 id btnSalvarCache
 id btnSalvarExterno

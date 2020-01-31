@@ -25,6 +25,7 @@ import com.github.mjdev.libaums.fs.FileSystem;
 import com.github.mjdev.libaums.fs.UsbFile;
 import com.github.mjdev.libaums.fs.UsbFileInputStream;
 import com.github.mjdev.libaums.fs.UsbFileOutputStream;
+import com.solinftec.exemploleituraescrita.util.CopyTaskParam;
 import com.solinftec.exemploleituraescrita.util.Helper;
 import com.solinftec.exemploleituraescrita.util.HomeCallback;
 import com.solinftec.exemploleituraescrita.util.Permissao;
@@ -38,14 +39,16 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+
 public class MainActivity extends AppCompatActivity implements HomeCallback {
 
 
-    private Button btnSalvar, btnSalvarPendrive;
+    private Button btnSalvar, btnSalvarPendrive, btnLerUsb;
     private Button btnSalvarExterno;
     private Button btnSalvarCache;
     private Button btnLeitura;
@@ -63,6 +66,8 @@ public class MainActivity extends AppCompatActivity implements HomeCallback {
     private static int TIMEOUT = 0;
     private boolean forceClaim = true;
 
+
+    private CopyTaskParam param;
     FileSystem currentFs;
 
 
@@ -98,9 +103,39 @@ public class MainActivity extends AppCompatActivity implements HomeCallback {
         mUsbManager = (UsbManager) getSystemService(Context.USB_SERVICE);
         mDetectedDevices = new ArrayList<UsbDevice>();
 
-
         inicializarComponentes();
         enablePermissions();
+        buttonClick();
+    }
+
+    private void buttonClick() {
+
+        //Leitura em arquivos cache
+        btnLeitura.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                File file = null;
+                BufferedReader input = null;
+
+                try {
+                    file = new File(getCacheDir(), "MyCache");
+
+                    input = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+                    String line;
+                    StringBuffer buffer = new StringBuffer();
+                    while ((line = input.readLine()) != null) {
+                        buffer.append(line);
+                    }
+                    Log.d("BUFFER", buffer.toString());
+                    Toast.makeText(getApplicationContext(), "Arquivo recuperado: " + buffer.toString(), Toast.LENGTH_LONG).show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
+
 
         btnSalvar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,28 +176,7 @@ public class MainActivity extends AppCompatActivity implements HomeCallback {
             }
         });
 
-        btnLeitura.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                File file = null;
-                BufferedReader input = null;
 
-                try {
-                    file = new File(getCacheDir(), "MyCache");
-
-                    input = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
-                    String line;
-                    StringBuffer buffer = new StringBuffer();
-                    while ((line = input.readLine()) != null) {
-                        buffer.append(line);
-                    }
-                    Log.d("BUFFER", buffer.toString());
-                    Toast.makeText(getApplicationContext(), "Arquivo recuperado: " + buffer.toString(), Toast.LENGTH_LONG).show();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
 
         btnSalvarExterno.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -210,25 +224,41 @@ public class MainActivity extends AppCompatActivity implements HomeCallback {
                     UsbFile[] files = root.listFiles();
                     for (UsbFile file : files) {
                         Log.d(TAG, file.getName());
-                        if (file.isDirectory()) {
-//                            Log.d(TAG, "Arquivo: "+file.getLength());
-
-//                            file.getLength();
-                        }
+//                        if (file.isDirectory()) {
+//                            Log.d(TAG, "Arquivo: " + file.getLength());
+//
+//                        }
                     }
-                    UsbFile newDir = root.createDirectory("foo");
-                    UsbFile file = newDir.createFile("bar.txt");
+                    UsbFile newDir;
+                    UsbFile file = null;
+//                    if (Objects.requireNonNull(root.search("Logs")).isDirectory()) {
+                    newDir = root.createDirectory("Logs");
+                    file = newDir.createFile("log" + Helper.retornarData() + ".txt");
+//                    }
+
 
                     //escrever no arquivo
                     OutputStream os = new UsbFileOutputStream(file);
 
-                    os.write("hello".getBytes());
+                    os.write("Rafa".getBytes());
                     os.close();
 
+
+                    Toast.makeText(getApplicationContext(), "Salvo com sucesso !", Toast.LENGTH_LONG).show();
                     // Lendo o arquivo
                     InputStream is = new UsbFileInputStream(file);
+
+                    StringBuffer b = new StringBuffer();
                     byte[] buffer = new byte[currentFs.getChunkSize()];
                     is.read(buffer);
+                    b.append(buffer);
+
+//                    param.from.read(1, ByteBuffer.wrap(buffer));
+
+
+
+
+//                    Log.e("Rec", "Arquivo recuperado: " + buffer.toString());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -238,6 +268,28 @@ public class MainActivity extends AppCompatActivity implements HomeCallback {
             }
         });
 
+        btnLerUsb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                File file = null;
+                BufferedReader input = null;
+
+                try {
+                    file = new File(String.valueOf(getUsbDevices().get(0).getDeviceName()), "/Logs");
+
+                    input = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+                    String line;
+                    StringBuffer buffer = new StringBuffer();
+                    while ((line = input.readLine()) != null) {
+                        buffer.append(line);
+                    }
+                    Toast.makeText(getApplicationContext(), "Arquivo recuperado: " + buffer.toString(), Toast.LENGTH_LONG).show();
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+
+            }
+        });
     }
 
 
@@ -246,6 +298,7 @@ public class MainActivity extends AppCompatActivity implements HomeCallback {
         if (mUsbManager.hasPermission(device))
             Log.d(TAG, "Obteve permissão!");
 
+        //Consultar se tem dispositivo de armazenamento disponíveis
         UsbMassStorageDevice[] devices = UsbMassStorageDevice.getMassStorageDevices(this);
         if (devices.length > 0) {
             mUsbMSDevice = devices[0];
@@ -255,6 +308,9 @@ public class MainActivity extends AppCompatActivity implements HomeCallback {
             for (UsbMassStorageDevice devic : devices) {
                 devic.init();
                 currentFs = devic.getPartitions().get(0).getFileSystem();
+                Log.d(TAG, "Lista de arquivos: " + currentFs.getRootDirectory().getAbsolutePath());
+
+                Log.d(TAG, "Lista de arquivos: " + Arrays.toString(new boolean[]{Arrays.toString(currentFs.getRootDirectory().listFiles()).contains("Unip")}));
                 Log.d(TAG, "Capacity: " + currentFs.getCapacity());
                 Log.d(TAG, "Occupied Space: " + currentFs.getOccupiedSpace());
                 Log.d(TAG, "Free Space: " + currentFs.getFreeSpace());
@@ -327,6 +383,7 @@ public class MainActivity extends AppCompatActivity implements HomeCallback {
         edtTxtSalvar = findViewById(R.id.edtTxtSalvar);
         edtCaminhoiUsb = findViewById(R.id.edtCaminhoUsb);
         btnSalvarExterno = findViewById(R.id.btnSalvarExterno);
+        btnLerUsb = findViewById(R.id.btnLerUsb);
     }
 
     @Override

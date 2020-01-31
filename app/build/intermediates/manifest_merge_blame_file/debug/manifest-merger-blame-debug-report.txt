@@ -44,7 +44,7 @@
 26        android:allowBackup="true"
 26-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:19:9-35
 27        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-27-->[androidx.core:core:1.1.0] C:\Users\Rafael Pimenta\.gradle\caches\transforms-2\files-2.1\7ddf3b3453ff2ae36284abc49da050c2\core-1.1.0\AndroidManifest.xml:24:18-86
+27-->[androidx.core:core:1.2.0-rc01] C:\Users\Rafael Pimenta\.gradle\caches\transforms-2\files-2.1\909c813a7540453031b6c31201db5c07\core-1.2.0-rc01\AndroidManifest.xml:24:18-86
 28        android:banner="@drawable/banner"
 28-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:21:9-42
 29        android:debuggable="true"
