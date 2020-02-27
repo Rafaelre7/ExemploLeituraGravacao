@@ -5,7 +5,7 @@
 5    android:versionName="1.0" >
 6
 7    <uses-sdk
-8        android:minSdkVersion="23"
+8        android:minSdkVersion="17"
 8-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml
 9        android:targetSdkVersion="29" />
 9-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml
@@ -48,62 +48,61 @@
 28        android:banner="@drawable/banner"
 28-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:21:9-42
 29        android:debuggable="true"
-30        android:extractNativeLibs="false"
-31        android:icon="@mipmap/ic_launcher"
-31-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:20:9-43
-32        android:label="@string/app_name"
-32-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:22:9-41
-33        android:roundIcon="@mipmap/ic_launcher_round"
-33-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:23:9-54
-34        android:testOnly="true"
-35        android:theme="@style/AppTheme" >
-35-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:24:9-40
-36        <activity android:name="com.solinftec.exemploleituraescrita.MainActivity" >
-36-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:25:9-40:20
-36-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:25:19-47
-37            <intent-filter>
-37-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:26:13-31:29
-38                <action android:name="android.intent.action.MAIN" />
-38-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:27:17-69
-38-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:27:25-66
-39
-40                <category android:name="android.intent.category.LAUNCHER" />
-40-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:29:17-77
-40-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:29:27-74
-41            </intent-filter>
-42            <intent-filter>
-42-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:33:13-35:29
-43                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
-43-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:34:17-89
-43-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:34:25-87
-44            </intent-filter>
-45
-46            <meta-data
-46-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:37:13-38:56
-47                android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
-47-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:37:24-86
-48                android:resource="@xml/device_filter" />
-48-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:38:17-54
-49        </activity>
-50        <activity
-50-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:42:9-52:20
-51            android:name="com.solinftec.exemploleituraescrita.TVMainActivity"
-51-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:43:13-43
-52            android:label="@string/app_name"
-52-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:44:13-45
-53            android:noHistory="true" >
-53-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:45:13-37
-54            <intent-filter>
-54-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:47:13-50:29
-55                <action android:name="android.intent.action.MAIN" />
-55-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:27:17-69
-55-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:27:25-66
-56
-57                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
-57-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:49:17-86
-57-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:49:27-83
-58            </intent-filter>
-59        </activity>
-60    </application>
-61
-62</manifest>
+30        android:icon="@mipmap/ic_launcher"
+30-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:20:9-43
+31        android:label="@string/app_name"
+31-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:22:9-41
+32        android:roundIcon="@mipmap/ic_launcher_round"
+32-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:23:9-54
+33        android:testOnly="true"
+34        android:theme="@style/AppTheme" >
+34-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:24:9-40
+35        <activity android:name="com.solinftec.exemploleituraescrita.MainActivity" >
+35-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:25:9-40:20
+35-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:25:19-47
+36            <intent-filter>
+36-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:26:13-31:29
+37                <action android:name="android.intent.action.MAIN" />
+37-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:27:17-69
+37-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:27:25-66
+38
+39                <category android:name="android.intent.category.LAUNCHER" />
+39-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:29:17-77
+39-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:29:27-74
+40            </intent-filter>
+41            <intent-filter>
+41-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:33:13-35:29
+42                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+42-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:34:17-89
+42-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:34:25-87
+43            </intent-filter>
+44
+45            <meta-data
+45-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:37:13-38:56
+46                android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
+46-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:37:24-86
+47                android:resource="@xml/device_filter" />
+47-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:38:17-54
+48        </activity>
+49        <activity
+49-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:42:9-52:20
+50            android:name="com.solinftec.exemploleituraescrita.TVMainActivity"
+50-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:43:13-43
+51            android:label="@string/app_name"
+51-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:44:13-45
+52            android:noHistory="true" >
+52-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:45:13-37
+53            <intent-filter>
+53-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:47:13-50:29
+54                <action android:name="android.intent.action.MAIN" />
+54-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:27:17-69
+54-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:27:25-66
+55
+56                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+56-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:49:17-86
+56-->C:\Users\Rafael Pimenta\StudioProjects\ExemploLeituraEscrita\app\src\main\AndroidManifest.xml:49:27-83
+57            </intent-filter>
+58        </activity>
+59    </application>
+60
+61</manifest>

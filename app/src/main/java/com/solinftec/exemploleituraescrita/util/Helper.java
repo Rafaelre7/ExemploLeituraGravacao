@@ -4,6 +4,12 @@ import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -65,5 +71,40 @@ public class Helper {
         // The directory is now empty or this is a file so delete it
         return dir.delete();
     }
+
+    public static void copyDirectory(File sourceLocation, File targetLocation)
+            throws IOException {
+
+        if (sourceLocation.isDirectory()) {
+            if (!targetLocation.exists()) {
+                targetLocation.mkdirs();
+            }
+
+            String[] children = sourceLocation.list();
+            for (int i = 0; i < children.length; i++) {
+                copyDirectory(new File(sourceLocation, children[i]), new File(
+                        targetLocation, children[i]));
+            }
+        } else {
+
+            copyFile(sourceLocation, targetLocation);
+        }
+    }
+
+    public static void copyFile(File sourceLocation, File targetLocation)
+            throws FileNotFoundException, IOException {
+        InputStream in = new FileInputStream(sourceLocation);
+        OutputStream out = new FileOutputStream(targetLocation);
+
+        // Copy the bits from instream to outstream
+        byte[] buf = new byte[1024];
+        int len;
+        while ((len = in.read(buf)) > 0) {
+            out.write(buf, 0, len);
+        }
+        in.close();
+        out.close();
+    }
+
 
 }

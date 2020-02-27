@@ -3,7 +3,7 @@
     package="com.solinftec.exemploleituraescrita.test" >
 
     <uses-sdk
-        android:minSdkVersion="23"
+        android:minSdkVersion="17"
         android:targetSdkVersion="29" />
 
     <instrumentation
@@ -15,9 +15,7 @@
 
     <uses-permission android:name="android.permission.REORDER_TASKS" />
 
-    <application
-        android:debuggable="true"
-        android:extractNativeLibs="false" >
+    <application android:debuggable="true" >
         <uses-library android:name="android.test.runner" />
 
         <activity

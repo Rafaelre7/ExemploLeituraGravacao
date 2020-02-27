@@ -742,6 +742,7 @@ id barrier
 id beginning
 id blocking
 id bottom
+id btnCopyPast
 id btnLeitura
 id btnLerUsb
 id btnSalvar
