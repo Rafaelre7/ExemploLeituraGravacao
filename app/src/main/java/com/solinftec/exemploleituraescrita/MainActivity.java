@@ -21,6 +21,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.github.mjdev.libaums.UsbMassStorageDevice;
 import com.github.mjdev.libaums.fs.FileSystem;
@@ -28,6 +29,7 @@ import com.github.mjdev.libaums.fs.UsbFile;
 import com.github.mjdev.libaums.fs.UsbFileInputStream;
 import com.github.mjdev.libaums.fs.UsbFileOutputStream;
 import com.solinftec.exemploleituraescrita.util.CopyTaskParam;
+import com.solinftec.exemploleituraescrita.util.ExternalStorage;
 import com.solinftec.exemploleituraescrita.util.Helper;
 import com.solinftec.exemploleituraescrita.util.HomeCallback;
 import com.solinftec.exemploleituraescrita.util.Permissao;
@@ -46,6 +48,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity implements HomeCallback {
@@ -184,15 +187,13 @@ public class MainActivity extends AppCompatActivity implements HomeCallback {
         });
 
 
-        btnSalvarExterno.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String content = "Teste salvamento externo";
-                File file;
-                FileOutputStream outputStream;
-                if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                    try {
-                        file = new File("sdcard/Trabalho/Solinftec/Logs", "Log" + Helper.retornarData()); //Nesta linha salva na raiz
+        btnSalvarExterno.setOnClickListener(view -> {
+            String content = "Teste salvamento externo";
+            File file;
+            FileOutputStream outputStream;
+            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                try {
+                    file = new File("sdcard/Trabalho/Solinftec/Logs", "Log" + Helper.retornarData()); //Nesta linha salva na raiz
 
 //                        file = new File(Environment.getExternalStorageDirectory() + "/Trabalho/Solinftec/Logs", "Log" + Helper.retornarData()); //Nesta linha salva na raiz
 
@@ -200,39 +201,30 @@ public class MainActivity extends AppCompatActivity implements HomeCallback {
 
 //                        file = new File(Environment.getExternalStoragePublicDirectory(getExternalFilesDir(Environment.MEDIA_MOUNTED)), "MyCache"); //Nesta linha salva no diretorio especifico
 
-                        outputStream = new FileOutputStream(file);
-                        //                        outputStream.write(content.getBytes());
-                        outputStream.write(edtTxtSalvar.getText().toString().getBytes());
-                        outputStream.close();
+                    outputStream = new FileOutputStream(file);
+                    //                        outputStream.write(content.getBytes());
+                    outputStream.write(edtTxtSalvar.getText().toString().getBytes());
+                    outputStream.close();
 
-                        Toast.makeText(getApplicationContext(), "Salvo com sucesso !", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Salvo com sucesso !", Toast.LENGTH_LONG).show();
 
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    Toast.makeText(getApplicationContext(), "Dispositivo de armazenamento não está disponivel ! ", Toast.LENGTH_LONG).show();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-
-
+            } else {
+                Toast.makeText(getApplicationContext(), "Dispositivo de armazenamento não está disponivel ! ", Toast.LENGTH_LONG).show();
             }
+
+
         });
 
         btnSalvarPendrive.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-
+            public void onClick(View v) {
                 try {
 
                     //File filter
-                    File diretorio = new File("C/");
-                    File[] listFiles = diretorio.listFiles(new FileFilter() {
-                        @Override
-                        public boolean accept(File file) {
-                            return file.getName().startsWith("a"); // apenas arquivos que começam com a letra "a"
-                        }
-                    });
-
+                    File diretorio = new File("storage/emulated/0/Trabalho/Teta/log_comboio_2603.txt");
 
                     UsbFile root = currentFs.getRootDirectory();
 
@@ -281,22 +273,48 @@ public class MainActivity extends AppCompatActivity implements HomeCallback {
         });
 
         btnLerUsb.setOnClickListener(view -> {
-            File file = null;
-            BufferedReader input = null;
 
-            try {
-                file = new File(getUsbDevices().get(0).getDeviceName(), "/Logs");
+//            Map<String, File> externalLocations = ExternalStorage.getAllStorageLocations();
+//            File sdCard = externalLocations.get(ExternalStorage.SD_CARD);
+////            File externalSdCard = externalLocations.get(ExternalStorage.EXTERNAL_SD_CARD);
+//            File usb = new File("/mnt");
+//
+//
+//            usb.getParent();
+//            usb.listFiles();
+//
+//            Log.d("Caminho", sdCard.getAbsolutePath());
 
-                input = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
-                String line;
-                StringBuffer buffer = new StringBuffer();
-                while ((line = input.readLine()) != null) {
-                    buffer.append(line);
-                }
-                Toast.makeText(getApplicationContext(), "Arquivo recuperado: " + buffer.toString(), Toast.LENGTH_LONG).show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+
+//            Helper.getSdCardPaths(this,true);
+
+            final File[] appsDir = ContextCompat.getExternalFilesDirs(this, null);
+
+//            Log.d("caminho", String.valueOf(appsDir[0]));
+            final ArrayList<File> extRootPaths = new ArrayList<>();
+            for (final File file : appsDir)
+                extRootPaths.add(file.getParentFile().getParentFile().getParentFile().getParentFile());
+
+
+//            Log.d("Caminho", usb.listFiles());
+
+
+//            File file = null;
+//            BufferedReader input = null;
+//
+//            try {
+//                file = new File(getUsbDevices().get(0).getDeviceName(), "/Logs");
+//
+//                input = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+//                String line;
+//                StringBuffer buffer = new StringBuffer();
+//                while ((line = input.readLine()) != null) {
+//                    buffer.append(line);
+//                }
+//                Toast.makeText(getApplicationContext(), "Arquivo recuperado: " + buffer.toString(), Toast.LENGTH_LONG).show();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
 
         });
     }
@@ -319,8 +337,8 @@ public class MainActivity extends AppCompatActivity implements HomeCallback {
                 currentFs = devic.getPartitions().get(0).getFileSystem();
                 Log.d(TAG, "Lista de arquivos: " + currentFs.getRootDirectory().getAbsolutePath());
 
-                Log.d(TAG, "Lista de arquivos: " + Arrays.toString(new boolean[]{Arrays.toString(currentFs.getRootDirectory().listFiles()).contains("Unip")}));
-                Log.d(TAG, "Lista de arquivos: " + Arrays.toString(new boolean[]{Arrays.toString(currentFs.getRootDirectory().search("Solinftec").listFiles()).contains("usb")}));
+//                Log.d(TAG, "Lista de arquivos: " + Arrays.toString(new boolean[]{Arrays.toString(currentFs.getRootDirectory().listFiles()).contains("Unip")}));
+//                Log.d(TAG, "Lista de arquivos: " + Arrays.toString(new boolean[]{Arrays.toString(currentFs.getRootDirectory().search("Solinftec").listFiles()).contains("usb")}));
                 Log.d(TAG, "Capacity: " + currentFs.getCapacity());
                 Log.d(TAG, "Occupied Space: " + currentFs.getOccupiedSpace());
                 Log.d(TAG, "Free Space: " + currentFs.getFreeSpace());
@@ -413,6 +431,7 @@ public class MainActivity extends AppCompatActivity implements HomeCallback {
     @Override
     protected void onResume() {
         super.onResume();
+
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);

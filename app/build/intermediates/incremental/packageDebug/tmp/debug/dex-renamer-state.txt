@@ -1,4 +1,4 @@
-#Thu Feb 27 14:37:01 BRT 2020
+#Fri Mar 27 16:07:30 BRT 2020
 base.0=C\:\\Users\\Rafael Pimenta\\StudioProjects\\ExemploLeituraEscrita\\app\\build\\intermediates\\dex\\debug\\out\\classes.dex
 path.0=classes.dex
 renamed.0=classes.dex

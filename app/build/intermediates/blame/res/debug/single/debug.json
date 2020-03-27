@@ -32,20 +32,20 @@
         "source": "C:\\Users\\Rafael Pimenta\\.gradle\\caches\\transforms-2\\files-2.1\\a136933342b0efb06224178e8f312868\\appcompat-1.1.0\\res\\layout\\abc_search_view.xml"
     },
     {
-        "merged": "C:\\Users\\Rafael Pimenta\\StudioProjects\\ExemploLeituraEscrita\\app\\build\\intermediates\\res\\merged\\debug\\drawable-anydpi-v21_ic_launcher_background.xml.flat",
-        "source": "C:\\Users\\Rafael Pimenta\\StudioProjects\\ExemploLeituraEscrita\\app\\build\\generated\\res\\pngs\\debug\\drawable-anydpi-v21\\ic_launcher_background.xml"
-    },
-    {
         "merged": "C:\\Users\\Rafael Pimenta\\StudioProjects\\ExemploLeituraEscrita\\app\\build\\intermediates\\res\\merged\\debug\\layout_abc_screen_simple_overlay_action_mode.xml.flat",
         "source": "C:\\Users\\Rafael Pimenta\\.gradle\\caches\\transforms-2\\files-2.1\\a136933342b0efb06224178e8f312868\\appcompat-1.1.0\\res\\layout\\abc_screen_simple_overlay_action_mode.xml"
     },
     {
-        "merged": "C:\\Users\\Rafael Pimenta\\StudioProjects\\ExemploLeituraEscrita\\app\\build\\intermediates\\res\\merged\\debug\\layout_abc_action_mode_close_item_material.xml.flat",
-        "source": "C:\\Users\\Rafael Pimenta\\.gradle\\caches\\transforms-2\\files-2.1\\a136933342b0efb06224178e8f312868\\appcompat-1.1.0\\res\\layout\\abc_action_mode_close_item_material.xml"
+        "merged": "C:\\Users\\Rafael Pimenta\\StudioProjects\\ExemploLeituraEscrita\\app\\build\\intermediates\\res\\merged\\debug\\drawable-anydpi-v21_ic_launcher_background.xml.flat",
+        "source": "C:\\Users\\Rafael Pimenta\\StudioProjects\\ExemploLeituraEscrita\\app\\build\\generated\\res\\pngs\\debug\\drawable-anydpi-v21\\ic_launcher_background.xml"
     },
     {
         "merged": "C:\\Users\\Rafael Pimenta\\StudioProjects\\ExemploLeituraEscrita\\app\\build\\intermediates\\res\\merged\\debug\\layout_select_dialog_multichoice_material.xml.flat",
         "source": "C:\\Users\\Rafael Pimenta\\.gradle\\caches\\transforms-2\\files-2.1\\a136933342b0efb06224178e8f312868\\appcompat-1.1.0\\res\\layout\\select_dialog_multichoice_material.xml"
+    },
+    {
+        "merged": "C:\\Users\\Rafael Pimenta\\StudioProjects\\ExemploLeituraEscrita\\app\\build\\intermediates\\res\\merged\\debug\\layout_abc_action_mode_close_item_material.xml.flat",
+        "source": "C:\\Users\\Rafael Pimenta\\.gradle\\caches\\transforms-2\\files-2.1\\a136933342b0efb06224178e8f312868\\appcompat-1.1.0\\res\\layout\\abc_action_mode_close_item_material.xml"
     },
     {
         "merged": "C:\\Users\\Rafael Pimenta\\StudioProjects\\ExemploLeituraEscrita\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxxhdpi_ic_launcher_round.png.flat",
